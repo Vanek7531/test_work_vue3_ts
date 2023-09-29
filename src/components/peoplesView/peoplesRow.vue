@@ -24,7 +24,6 @@ onMounted(() => {
 </script>
 
 <template>
-	<!-- {{ favoritesPeoples }} -->
   <tr>
     <td>
       <div>{{ people.name }}</div>

@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import router from "../../router";
-
+import { useRoute } from "vue-router";
 import { peoplesComp, currentPeople } from "@/composables/peoples";
 
 const { getCurrentPeople, isFavorite, addToFavorites, deleteFromFavorites } =
   peoplesComp();
+const route = useRoute();
 
 onMounted(async () => {
-  console.log("router", router.currentRoute._rawValue.params.id);
-  getCurrentPeople(router.currentRoute._rawValue.params.id);
+  getCurrentPeople(route.params.id);
 });
 </script>
 

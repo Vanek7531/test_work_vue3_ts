@@ -11,24 +11,26 @@ const {
   isFavorite,
   getFavoritesPeoples,
   favoritesPeoples,
-	getCurrentPeople,
+  getCurrentPeople,
 } = peoplesComp();
 
 const inputValue = ref("");
 const results = ref();
 const debounce = ref(false);
 const goToCurrentPeople = async (url: string) => {
-	let id = url.replace(/\D/g, "")
+  let id = url.replace(/\D/g, "");
   router.push(`/people/${id}`);
   inputValue.value = "";
   results.value = null;
-	getCurrentPeople(id)
+  getCurrentPeople(id);
 };
 
-const cheackInfo = (info: any) => {
-  // console.log("info", info);
+const loading = ref(false);
+
+const cheackInfo = async (info: any) => {
   if (debounce.value) return;
   else {
+    loading.value = true;
     try {
       debounce.value = true;
       setTimeout(() => {
@@ -37,10 +39,12 @@ const cheackInfo = (info: any) => {
       axios
         .get(`https://swapi.dev/api/people/?search${info}`)
         .then((response) => {
-          // console.log("response.data", response.data);
           results.value = response.data.results;
+          loading.value = false;
         });
     } catch (er) {
+      // оставил дубль в связи с тем что вне функции false отрабатывает сразу
+      loading.value = false;
       console.log("er", er);
     }
   }
@@ -50,12 +54,14 @@ watch(inputValue, (newVal) => {
   if (newVal && newVal.length >= 1) {
     cheackInfo(inputValue.value);
   }
+  if (newVal.length === 0) {
+    results.value = null;
+  }
 });
 </script>
 
 <template>
   <header>
-    <!-- {{ inputValue }} input -->
     <div class="header">
       <nav>
         <router-link to="/">Home</router-link>
@@ -65,15 +71,21 @@ watch(inputValue, (newVal) => {
     </div>
     <div class="search-container">
       <input v-model="inputValue" type="text" />
-      <div
-        class="search-container__list"
-        v-for="res in results"
-        :key="res.name"
-      >
-        <div class="search-container__item" @click="goToCurrentPeople(res.url)">
-          {{ res.name }}
+      <div v-if="!loading">
+        <div
+          class="search-container__list"
+          v-for="res in results"
+          :key="res.name"
+        >
+          <div
+            class="search-container__item"
+            @click="goToCurrentPeople(res.url)"
+          >
+            {{ res.name }}
+          </div>
         </div>
       </div>
+      <div v-else class="search-container__item">Загрузка</div>
     </div>
   </header>
 
