@@ -1,6 +1,8 @@
-import { withDefaults, defineProps} from "vue";
+<!-- import { withDefaults, defineProps} from "vue"; -->
 
 <script setup lang="ts">
+import { RouterLink, RouterView } from "vue-router";
+
 import PeoplesRow from "@/components/peoplesView/peoplesRow.vue";
 import type { peopleDescription } from "@/interfaces";
 
@@ -9,7 +11,7 @@ defineProps({
     type: Object as () => peopleDescription,
     default: [],
   },
-})
+});
 </script>
 
 <template>
@@ -19,16 +21,27 @@ defineProps({
       <th>Рост</th>
       <th>Вес</th>
       <th>цвет волос</th>
-      <th> actions</th>
+      <th>actions</th>
     </tr>
     <peoples-row
-        v-for="people in peoples"
-        :key="people.birth_year"
-        :people="people"
+      v-for="people in peoples"
+      :key="people.birth_year"
+      :people="people"
     />
   </table>
 </template>
 
-<style scoped>
-
+<style lang="scss">
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  td {
+    border: 1px solid black;
+		text-align: center;
+  }
+  td,
+  th {
+    padding: 5px;
+  }
+}
 </style>

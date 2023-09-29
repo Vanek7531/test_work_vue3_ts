@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import {peoplesComp} from "@/composables/peoples";
+import { peoplesComp } from "@/composables/peoples";
 import type { peopleDescription } from "@/interfaces";
-import {computed} from "vue";
+import router from "@/router";
+import { computed, onMounted } from "vue";
 
-const { addToFavorites, deleteFromFavorites  } = peoplesComp()
+const {
+  addToFavorites,
+  deleteFromFavorites,
+  isFavorite,
+  getFavoritesPeoples,
+  favoritesPeoples,
+} = peoplesComp();
 
 const props = defineProps({
   people: {
     type: Object as () => peopleDescription,
     default: [],
   },
-})
-const favoritesPeoples = JSON.parse(localStorage.getItem('favorites') || '[]');
-const canAdd = computed(() => {
-  return !favoritesPeoples.findIndex((el: any) => JSON.parse(el).name !== props.people.name)
-})
-const canRemove = computed(() => {
-  return favoritesPeoples.findIndex((el: any) => JSON.parse(el).name === props.people.name)
-})
-
+});
+onMounted(() => {
+  getFavoritesPeoples();
+});
 </script>
 
 <template>
+	<!-- {{ favoritesPeoples }} -->
   <tr>
     <td>
       <div>{{ people.name }}</div>
@@ -35,13 +38,29 @@ const canRemove = computed(() => {
     <td>
       <div>{{ people.hair_color }}</div>
     </td>
-    <td>
-      <div @click="addToFavorites(people)" > добавить элемент </div>
-      <div @click="deleteFromFavorites(people.name)"  > удалить элемент </div>
+    <td class="actions">
+      <div style="color:rgb(40, 231, 72)" @click="addToFavorites(people)" v-if="!isFavorite(people.name)">
+        добавить элемент в избраное
+      </div>
+      <div style="color:rgb(231, 40, 40)" @click="deleteFromFavorites(people.name)" v-else>
+        удалить элемент из избраного
+      </div>
     </td>
   </tr>
+  <div></div>
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
+.actions {
+  // display: flex;
+  // flex-direction: column;
+  // gap: 10px;
+  & div {
+    padding: 2px;
+    cursor: pointer;
+  }
+  & div:hover {
+    color: rgb(0, 17, 255) !important;
+  }
+}
 </style>

@@ -1,29 +1,127 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import axios from "axios";
+import { ref, watch } from "vue";
+import { RouterLink, RouterView } from "vue-router";
+import router from "./router";
+import { peoplesComp } from "./composables/peoples";
 
+const {
+  addToFavorites,
+  deleteFromFavorites,
+  isFavorite,
+  getFavoritesPeoples,
+  favoritesPeoples,
+	getCurrentPeople,
+} = peoplesComp();
+
+const inputValue = ref("");
+const results = ref();
+const debounce = ref(false);
+const goToCurrentPeople = async (url: string) => {
+	let id = url.replace(/\D/g, "")
+  router.push(`/people/${id}`);
+  inputValue.value = "";
+  results.value = null;
+	getCurrentPeople(id)
+};
+
+const cheackInfo = (info: any) => {
+  // console.log("info", info);
+  if (debounce.value) return;
+  else {
+    try {
+      debounce.value = true;
+      setTimeout(() => {
+        debounce.value = false;
+      }, 1000);
+      axios
+        .get(`https://swapi.dev/api/people/?search${info}`)
+        .then((response) => {
+          // console.log("response.data", response.data);
+          results.value = response.data.results;
+        });
+    } catch (er) {
+      console.log("er", er);
+    }
+  }
+};
+
+watch(inputValue, (newVal) => {
+  if (newVal && newVal.length >= 1) {
+    cheackInfo(inputValue.value);
+  }
+});
 </script>
 
 <template>
   <header>
-
-    <div class="wrapper">
-
+    <!-- {{ inputValue }} input -->
+    <div class="header">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/peoples">About</RouterLink>
+        <router-link to="/">Home</router-link>
+        <router-link to="/peoples">Peoples</router-link>
+        <router-link to="/favorites">Favorites</router-link>
       </nav>
+    </div>
+    <div class="search-container">
+      <input v-model="inputValue" type="text" />
+      <div
+        class="search-container__list"
+        v-for="res in results"
+        :key="res.name"
+      >
+        <div class="search-container__item" @click="goToCurrentPeople(res.url)">
+          {{ res.name }}
+        </div>
+      </div>
     </div>
   </header>
 
-  <RouterView />
+  <RouterView class="wrapper" />
 </template>
-
+<style lang="scss" scoped>
+.search-container {
+  position: absolute;
+  right: 15%;
+  top: 10%;
+  background: grey;
+  padding: 20px;
+  color: #fff;
+  input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  &__list {
+  }
+  &__item {
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+      background: aqua;
+      color: black;
+    }
+  }
+}
+</style>
 <style scoped>
 header {
+  position: relative;
   line-height: 1.5;
   max-height: 100vh;
 }
-
+.header {
+  display: flex;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+nav {
+  display: flex;
+  gap: 20px;
+}
 .logo {
   display: block;
   margin: 0 auto 2rem;

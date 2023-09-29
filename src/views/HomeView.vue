@@ -3,6 +3,6 @@
 
 <template>
   <main>
-    <p>asdasd</p>
+    <p>HOME</p>
   </main>
 </template>

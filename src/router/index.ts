@@ -1,35 +1,33 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
-import PeoplesView from '@/views/peoples/PeoplesView.vue'
-import PeoplesIdView from "@/views/peoples/PeoplesIdView.vue"
-import Favorites from "@/views/favorites/Favorites.vue";
+import PeoplesView from "@/views/peoples/PeoplesView.vue";
+import PeoplesIdView from "@/views/peoples/PeoplesIdView.vue";
+import FavoritesView from "@/views/favorites/FavoritesView.vue";
 
 const router = createRouter({
-  end: undefined, sensitive: undefined, strict: undefined,
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: "/",
+      name: "home",
+      component: HomeView,
     },
     {
-      path: '/peoples/',
-      name: 'peoples',
+      path: "/peoples/",
+      name: "peoples",
       component: PeoplesView,
     },
     {
-      path: '/people/:id',
-      name: 'peoplesId',
-      component: PeoplesIdView
+      path: "/people/:id",
+      name: "peoplesId",
+      component: PeoplesIdView,
     },
     {
-      path: '/favorites',
-      name: 'favorites',
-      component: Favorites
+      path: "/favorites",
+      name: "FavoritesView",
+      component: FavoritesView,
+    },
+  ],
+});
 
-    }
-  ]
-})
-
-export default router
+export default router;
