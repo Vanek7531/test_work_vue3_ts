@@ -1,8 +1,4 @@
-<!-- import { withDefaults, defineProps} from "vue"; -->
-
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-
 import PeoplesRow from "@/components/peoplesView/peoplesRow.vue";
 import type { peopleDescription } from "@/interfaces";
 
@@ -37,7 +33,7 @@ table {
   border: 1px solid black;
   td {
     border: 1px solid black;
-		text-align: center;
+    text-align: center;
   }
   td,
   th {

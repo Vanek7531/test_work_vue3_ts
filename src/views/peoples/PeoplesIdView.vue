@@ -3,8 +3,13 @@ import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { peoplesComp, currentPeople } from "@/composables/peoples";
 
-const { getCurrentPeople, isFavorite, addToFavorites, deleteFromFavorites } =
-  peoplesComp();
+const {
+  getCurrentPeople,
+  isFavorite,
+  addToFavorites,
+  deleteFromFavorites,
+  elements,
+} = peoplesComp();
 const route = useRoute();
 
 onMounted(async () => {
@@ -15,43 +20,13 @@ onMounted(async () => {
 <template>
   <div class="table" v-if="currentPeople">
     <div class="table__header">
-      <div>name</div>
-      <div>height</div>
-      <div>mass</div>
-      <div>hair_color</div>
-      <div>skin_color</div>
-      <div>birth_year</div>
-      <div>gender</div>
-      <div>homeworld</div>
-      <div>films</div>
-      <div>species</div>
-      <div v-if="currentPeople.vehicles.length > 0">vehicles</div>
-      <div v-if="currentPeople.starships.length > 0">starships</div>
-      <div>created</div>
-      <div>edit</div>
-      <div>url</div>
-      <div>Delete</div>
+      <div v-for="el in elements" :key="el.label">{{ el.label }}</div>
+      <div>удалить</div>
     </div>
     <div class="table__body">
-      <div>{{ currentPeople.name }}</div>
-      <div>{{ currentPeople.height }}</div>
-      <div>{{ currentPeople.mass }}</div>
-      <div>{{ currentPeople.hair_color }}</div>
-      <div>{{ currentPeople.skin_color }}</div>
-      <div>{{ currentPeople.birth_year }}</div>
-      <div>{{ currentPeople.gender }}</div>
-      <div>{{ currentPeople.homeworld }}</div>
-      <div>{{ currentPeople.films }}</div>
-      <div>{{ currentPeople.species }}</div>
-      <div v-if="currentPeople.vehicles.length > 0">
-        {{ currentPeople.vehicles }}
+      <div v-for="el in elements" :key="el.label">
+        {{ currentPeople[el.label] }}
       </div>
-      <div v-if="currentPeople.starships.length > 0">
-        {{ currentPeople.starships }}
-      </div>
-      <div>{{ currentPeople.created }}</div>
-      <div>{{ currentPeople.edit }}</div>
-      <div>{{ currentPeople.url }}</div>
       <div class="actions">
         <div
           style="color: rgb(40, 231, 72)"
@@ -74,9 +49,6 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .actions {
-  // display: flex;
-  // flex-direction: column;
-  // gap: 10px;
   & div {
     padding: 2px;
     cursor: pointer;

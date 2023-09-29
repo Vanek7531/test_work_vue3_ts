@@ -17,7 +17,7 @@ const {
 const inputValue = ref("");
 const results = ref();
 const debounce = ref(false);
-const goToCurrentPeople = async (url: string) => {
+const goToCurrentPeople = (url: string) => {
   let id = url.replace(/\D/g, "");
   router.push(`/people/${id}`);
   inputValue.value = "";

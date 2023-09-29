@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 
 import { peoplesComp } from "@/composables/peoples";
 const { favoritesPeoples, getFavoritesPeoples, deleteFromFavorites } = peoplesComp();
 
-// const favoritesPeoples = computed(() => {
-//   return JSON.parse(localStorage.getItem("favorites") || "[]");
-// });
 onMounted(()=>{
 	getFavoritesPeoples()
 })
